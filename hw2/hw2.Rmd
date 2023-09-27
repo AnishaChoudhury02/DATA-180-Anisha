@@ -2,8 +2,8 @@
 title: "HW 2: Visualization, Base R"
 subtitle: "Data 180, Professor Kennedy"
 author: 
-  name: "XXXX"
-  email: "XXXX@dickinson.edu"
+  name: "Anisha Choudhury"
+  email: "choudhua@dickinson.edu"
 date: '`r format(Sys.Date(), "%B %d, %Y")`' # no need to change date since this line grabs today's date
 output: 
   html_document
@@ -24,6 +24,9 @@ Make sure to insert a chunk for each (sub)section of the assignment.
 ```{r}
 library(MASS)
 data(Cars93)
+#importing excel 
+#library(readxl)
+#Cars93 <- read_excel("Downloads/Cars93.xlsx")
 ```
 
 The library function will load and attach add-on packages that have been previously installed on your machine. This will give you access to the functions and datasets available in the package. In general, you only need to install a package once (although it may require updating from time to time) but you need to access it using the library command every time you start a new session in R (and want the functionality). 
@@ -37,11 +40,12 @@ head(Cars93)
 ## Task 1
 a) Create a Frequency table and Relative Frequency table (latter uses percentages) for the variable `Type`. Make sure to round all digits to 3 digits.
 ```{r}
-
+table(Cars93$Type) #frequency table
+round(table(Cars93$Type)/nrow(Cars93),3) #relative frequency table
 ```
 b) Create a frequency bar graph for the variable `Type`. You can have count on the y axis.
 ```{r}
-
+barplot(table(Cars93$Type), ylab="Frequency",cex.lab=1.2, cex.names=1.2, cex.axis=1.2, col=c(5,6,7,4,2,3), main="Frequency table for Type")
 ```
 
 *	Your axes should be labeled and legible
@@ -51,19 +55,19 @@ b) Create a frequency bar graph for the variable `Type`. You can have count on t
 
 c) Create a pie chart of the variable `Type`.
 ```{r}
-
+pie(table(Cars93$Type), main="Type", col=c(11,5,15,14,18,20), cex=1.2)
 ```
 
 * The plot should include a title using the main argument.
 *	The names, labels, and axes sizes (cex parameter) should be set to 1.2
 
 d) What is the mode of the variable `Type`? Comment.
-
+-The mode of the variable "Type" is midsize because it has the highest frequency.
 
 ## Task 2 
 a) Create a histogram of the variable `Horsepower`.
 ```{r}
-
+hist(Cars93$Horsepower, xlab="Horsepower",cex.lab=1.2, cex.axis=1.2, col="orchid", main="Horsepower")
 ```
 
 *	Your axes should be labeled
@@ -73,41 +77,50 @@ a) Create a histogram of the variable `Horsepower`.
 
 b) Create a second histogram with breaks at 25 HP increments instead of 50.
 ```{r}
-
+hist(Cars93$Horsepower, xlab="Horsepower",cex.lab=1.2, cex.axis=1.2, col="orchid", main="Horsepower",breaks = seq( 0, 300, 25))
 ```
 
 * Use the breaks argument to define the classes
 * Other setting should be as in part (a)
 
 c) Which histogram more closely follows or rule of thumb for the suggested number of classes? Explain.
+-According to the rule of thumb, we sqrt the number of rows. In this case horsepower has 93 rows and its sqrt gives approx 10. Hence the graph that has the closest class to this number is the 2nd histogram. (9 classes compared to 5)
 ```{r}
-
+NROW(Cars93$Horsepower)
+range(Cars93$Horsepower)
 ```
-
 
 ## Task 3 
 a) What is the type of variable `Passengers`? (Categorical nominal/ordinal or Numerical discrete/continuous?) What happens if we were to make a histogram for `Passengers`? What is the problem with this graph?
+
+- It is a Numerical discrete type of variable. For the passengers table there are no cars for passengers 3 which is not evident in a histogram.
 ```{r}
 
+library(MASS)
+head(Cars93)
+hist(Cars93$Passengers, xlab="passengers",ylab="count", col="blue", main="Passengers")
 ```
 
 b) Correct the problem in part (a) by creating a more appropriate visualization. Make sure to label your axes, place a title, choose a custom color as in the previous graphs. (Bonus: use factor() with levels option to display x axis values with no observations on the plot.)
 ```{r}
-
+barplot(table(factor(Cars93$Passengers,levels=1:10)), xlab="Passengers", ylab="Frequency",main="Bar graph for Passengers")
 ```
 
 ## Task 4 
 a) Make a histogram of the variable `Length` (the default breaks are fine). Other aspects of the plot should be as in part (a) in Task 2.
 ```{r}
+hist(Cars93$Length, xlab="Length",cex.lab=1.2, cex.axis=1.2, col="darkcyan", main="Histogram for Length")
 
 ```
 
 b) What is the shape of the distribution?
-
+- the histogram approximately symmetric.
 
 c) Find the mean and median of the variable `Length.` Do these answers meet your expectations from part (b)?
+- the mean (shows the average) and the median (shows the middle observation)  for a histogram that is approx symmetric is generally more towards the center. In this case this is true since the calculated value is close to the length shown at the center of the graph ( approx 180). 
 ```{r}
-
+mean(Cars93$Length)
+median(Cars93$Length)
 ```
 
 You are done! 🏁 Don't forget to commit and push your .Rmd file to your Github repository before the due date.
