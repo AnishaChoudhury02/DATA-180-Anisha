@@ -2,8 +2,8 @@
 title: "HW 5"
 subtitle: "Data 180, Professor Kennedy"
 author: 
-  name: "Your Name"
-  email: "XXXX@dickinson.edu"
+  name: "Anisha Choudhury"
+  email: "choudhua@dickinson.edu"
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output: 
   html_document
@@ -21,18 +21,23 @@ print(X)
 
 a) Find the Euclidean distance between the first and second objects. Round the answer to have two decimal points. 
 
+Euclidean d=(θ1,θ2)=(√(0+1)^2+(0+2)^2+(-2-4)^2+(2-2)^2) = 6.40
+
 b) Find the Manhattan distance between the first and third objects. Round the answer to have two decimal points.
 
+Manhattan d=(θ1,θ3) = |2+1| + |-1+2| + |-1-4| + |3-2| = 10.00
+
 c) Find the Minkowski distance ($\ro$ = 3) between the second and third objects. Round the answer to have two decimal points.  
+
+Minkowski d= (|2-0|^3+|-1-0|^3+|-1+2|^3+|3-2|^3)^1/3 = 2.22
 
 # Question 2
 a) Use the filter and select commands to choose only vans from the `Cars93` data set. Select the variables (in this order) Model, Price, EngineSize, Horsepower, MPG.highway, and Length. Name this object `Vans93`. Note: Be sure to load the `dplyr` package after loading `MASS` to prevent masking of the select command. How many objects does `Vans93` have? Print the `Vans93` dataframe in your solutions. Note2: If you get any errors with `select()`, try using `dplyr::select()` to avoid conflicts in `dplyr` and `MASS` packages.
 ```{r}
 library(MASS)
 library(dplyr)
-
-
-
+Vans93 <- Cars93 %>% filter(Type == 'Van') %>%  select( Model, Price, EngineSize, Horsepower, MPG.highway, Length)
+print(Vans93)
 ```
 
 b) Use the `dist` and `as.matrix` functions to find the distance matrix for the vans set using the Euclidean metric. Call this matrix `Vans_Euclidean`. You will need to remove the first column of the `Vans93` dataframe when you pass it into the `dist` function, since the variable `Model` is not an appropriate variable for the cluster variate. You can do this by passing in `Vans93[,-1]` or `Vans93[,2:6]` (or any other way you like), converting it to a matrix and storing it as `Vans_Euclidean`. Next, set the row and column names of `Vans_Euclidean` to the Models of the vans using the rownames and colnames functions, so that it is easier for us to see what object we have in each row/column. Hint: This can be done by typing
@@ -44,14 +49,24 @@ rownames(Vans_Euclidean)<-Vans93[,1]
 
 Finally, round the values in this matrix to the hundredths place (two decimal points). Paste the final version of the matrix `Vans_Euclidean` into your solutions. Which two Vans (give the models) have the shortest distance between them? Which two have the largest distance between them?
 ```{r}
-
+Vans_Euclidean<-as.matrix(dist(Vans93[,-1]))
+colnames(Vans_Euclidean)<-Vans93[,1]
+rownames(Vans_Euclidean)<-Vans93[,1]
+Vans_Euclidean<-round(Vans_Euclidean,2)
+Vans_Euclidean
 ```
-
+The vans with the shortest distance between them are the Aerostar and the Caravan (3.44). The vans with the largest distance between them are the Lumina APV and the Eurovan (61.80).
 
 
 c) Repeat the steps in part (b) but use the Manhattan metric and call the object `Vans_Manhattan`.
 ```{r}
-
+Vans_Manhattan <- Vans93[,-1]
+Vans_Manhattan <- dist(Vans_Manhattan, method = "manhattan")
+Vans_Manhattan <- as.matrix(Vans_Manhattan)
+colnames(Vans_Manhattan)<-Vans93[,1]
+rownames(Vans_Manhattan)<-Vans93[,1]
+Vans_Manhattan<-round(Vans_Manhattan,2)
+Vans_Manhattan
 ```
 
 The vans with the shortest distance between them are the Quest and the MPV (5.0). The vans with the largest distance between them are the Lumina APV and the Eurovan (76.7).
@@ -66,13 +81,15 @@ print(D)
 Find (by hand) the inter-group distance between A = $\{O_1, O_4\}$ and B = $\{O_2, O_3, O_5\}$ (where $O_n$ denotes the $n$th object in the distance matrix **D**) using
 
 a) Nearest-neighbor
-
-
+d(A,B) = min{d12,d13,d15,d42,d43,d45}
+       = min{1,9,1.6,6,5,2} = 1 
 
 b) Farthest-neighbor
-
+d(A,B) = max{d12,d13,d15,d42,d43,d45}
+       = max{1,9,1.6,,6,5,2} = 9
 
 c) Average-neighbor
+d(A,B) = 1/|A||B| Σd(a,b) = 1/2·3 [1+9+1.6+6+5+2] = 24.6/6 = 4.1
 
 # Question 4
 Consider the following dendrogram created by a hierarchical clustering of 11 frequently used English words.
@@ -88,24 +105,35 @@ Let's practice hierarchical clustering with the `vertebrate` dataset that is sav
 
 a) First, read in the `vertebrate.csv` file and store it in a dataframe object named `vertebrate`. How many rows does the dataframe have? Print the entire dataset in your solutions.
 ```{r}
-
+vertebrate <- read.csv("/Users/anishachoudhury/Desktop/DATA 180 Anisha/DATA-180-Anisha/hw5/vertebrate.csv")
+vertebrate
 ```
 
 b) Perform two separate clustering analyses of the data using the `hclust` function. Provide the dendrograms for both clustering methods.
 
 (i)	using the Euclidean metric with complete linkage. Note: Similar to Question 2, start by creating a distance matrix named `vertebrate_euclidean` which should not include any text column. Add row and column names to the matrix from the `vertebrate` dataframe. Then apply `dist()` once again before feeding the matrix into `hclust()` function.
 ```{r}
-Ver_Euclidean<-as.matrix(dist(vertebrate[,-1]))
+Ver_Euclidean<-as.matrix(dist(vertebrate[,2:7]))
+colnames(Ver_Euclidean)<-vertebrate[,1]
+rownames(Ver_Euclidean)<-vertebrate[,1]
+Ver_Euclidean <- hclust(dist(Ver_Euclidean))
+plot(Ver_Euclidean,cex=.75,xlab="")
+plot(Ver_Euclidean,main="Clustered vertebrates, Euclidean Metric,Single Linkage",cex=.75,xlab="Vertebrates",lwd=3,cex.lab=1.25,hang=-1,sub="")
 
 ```
 
 (ii)using the Manhattan metric with single linkage and
 ```{r}
-
+Ver_Manhattan<-as.matrix(dist(vertebrate[,2:7], method = "manhattan")) #skip column 1 and 8
+colnames(Ver_Manhattan)<-vertebrate[,1]
+rownames(Ver_Manhattan)<-vertebrate[,1]
+Ver_Manhattan<-hclust(dist(Ver_Manhattan,method="manhattan"), method="single")
+Ver_Manhattan
+plot(Ver_Manhattan,main="Clustered vertebrates, ManhattanMetric, Single Linkage",cex=.75,xlab="Vertebrates",lwd=3,cex.lab=1.25,hang=-1,sub="")
 ```
 
 Which method do you prefer?
-
+Manhattan as the numbers are rounded so it is easier to interpret.
 
 In your dendrograms:
 
@@ -120,7 +148,12 @@ In your dendrograms:
 Bonus: (not required) generate the same dendrogram using the `ggdendro` package.
 
 ```{r}
-
+library(ggdendro)
+Ver_Euclidean<-as.matrix(dist(vertebrate[,-1]))
+colnames(Ver_Euclidean)<-vertebrate[,1]
+rownames(Ver_Euclidean)<-vertebrate[,1]
+Ver_Euclidean <- hclust(dist(Ver_Euclidean))
+ggdendrogram(Ver_Euclidean)
 
 ```
 
