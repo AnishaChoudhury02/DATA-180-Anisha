@@ -8,7 +8,7 @@ date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output: 
   html_document
 ---
-
+20/20. good job. 
 ```{r global options, include = FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
@@ -22,7 +22,9 @@ Read this table into R and create the object `Mammals_Milk` using
 
 ```{r}
 library(tidyverse)
-Mammals_Milk<-read.csv("/Users/anishachoudhury/Desktop/DATA 180 Anisha/DATA-180-Anisha/hw6/Milk_Composition.csv",header=T,row.names=1)
+#Mammals_Milk<-read.csv("/Users/anishachoudhury/Desktop/DATA 180 #Anisha/DATA-180-Anisha/hw6/Milk_Composition.csv",header=T,row.names=1)
+
+Mammals_Milk<-read.csv("C:/Users/rodge/OneDrive/Desktop/DATA_180 Repositories/Choudhury_Anisha/DATA-180-Anisha/hw6/Milk_Composition.csv",header=T,row.names=1)
 head(Mammals_Milk)
 ```
 
