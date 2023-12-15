@@ -1,0 +1,83 @@
+---
+title: "Final Project"
+author: "Anisha Choudhury"
+date: "2023-12-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+```{r cars}
+#import library
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+```
+
+```{r}
+XYZ <- read.csv("/Users/anishachoudhury/Desktop/DATA 180 Anisha/DATA-180-Anisha/loan_default_data_set.csv",header=T)
+#head(XYZ) 
+dim(XYZ)
+```
+(a)The dimension of the set is 2000x21
+
+
+```{r}
+nrow(XYZ) 
+ncol(XYZ) 
+colnames(XYZ)
+```
+There are 20,000 rows and 21 columns.
+(c)Type of data are numerical, character and integer.
+
+```{r}
+colSums(is.na(XYZ)) / nrow(XYZ) * 100 #all columns percentage of missing values
+```
+(d) columns containing missing values are "pct_card_over_50_uti" and "rep_income". Their percentage is 9.790  and 7.795  respectively.
+(e) We can deal with missing values by dropping those particular columns using functions like drop_na or replacing them with 0.
+(f) I would fit it as supervised learning model. The dataset has several columns with values that seems to determine who to approve or decline for credit. So inputs are used to get specific outputs.
+
+```{r}
+XYZ <- drop_na(XYZ)
+dim(XYZ) #16653 x 21 are the new dimensions
+```
+
+
+```{r}
+summary(XYZ) #2(a)
+```
+
+(b)For "num_card_inq_24_month", the mean is more than the median so it's right skewed. For "tot_amount_currently_past_due",  the mean is more than median so it's right shaped. For 'credit_age', the median is approximately equal to the mean so it will be bell-shaped.
+
+```{r}
+ggplot(XYZ,aes(x=num_card_inq_24_month)) + geom_histogram(fill="blue",binwidth =1) + labs(title = "Histogram of num_card_inq_24_monte", x = "num_card_inq_24_mont", y = "Frequency")
+#the plot matches the assumption of num_card_inq_24_month being right skewed.
+ggplot(XYZ,aes(x=tot_amount_currently_past_due)) + geom_histogram(fill="red", bins = 30) + labs(title = "Histogram of tot_amount_currently_past_due")
+#the plot matches the assumption of tot_amount_currently_past_due being rightly skewed.
+ggplot(XYZ,aes(x=credit_age)) + geom_histogram(fill="orange", bins=30) + labs(title = "Histogram for credit_age")
+#the plot matches the assumption of credit_age being bell-shaped.
+```
+(d) The first method to convert character to numeric can be the function  as.numeric. Secondly, we can also use the function  transform() method.
+
+```{r}
+ggplot(XYZ,aes(x=Def_ind)) + geom_bar(fill="pink") + labs(title = "Bar plot of Def_ind", x = "Def_ind", y = "Count")
+#(a)
+ggplot(XYZ,aes(x=rep_education)) + geom_bar(fill="lightgreen") + labs(title = "Bar plot of rep_education", x = "rep_education", y = "Count")
+#(b)
+ggplot(XYZ,aes(x=rep_income)) + geom_histogram(fill="skyblue") + labs(title = "Histogram of rep_income", x = "rep_income", y = "Frequency")
+#(c)
+ggplot(XYZ,aes(x=tot_balance)) + geom_boxplot(fill="orchid2") + labs(title = "Histogram of tot_balance", x = "tot_balance", y = "Frequency")
+```
+2(a)The bar graph for "Def_Ind” shows that the larger proportion of accounts were not defaulted after an account was approved and opened with bank XYZ in the past 18 months
+(b) The bar graph for "rep_education" shows that most applicants' education level were college  graduates, with high school being the next, graduates being the third and lastly others. 
+```{r}
+summary(XYZ$tot_balance)
+boxplot.stats(XYZ$tot_balance)$out
+```
+The five number summary: maximum:200,000  minimum:0  lower quartile:92142 upper quartile:122932 median:107503. The boxplot has outliers which we can check using the $out funtion producing around 89 outliers that is hard to observe directly from the boxplot.
+
