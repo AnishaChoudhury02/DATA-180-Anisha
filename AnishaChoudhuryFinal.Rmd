@@ -8,19 +8,21 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
+## 40/40. Good job Anisha. 
 ## R Markdown
-
+```{r}
+#install.packages("cli")
+```
 
 ```{r cars}
 #import library
 library(ggplot2)
-library(tidyr)
+#library(tidyr)
 library(dplyr)
 ```
 
 ```{r}
-XYZ <- read.csv("/Users/anishachoudhury/Desktop/DATA 180 Anisha/DATA-180-Anisha/loan_default_data_set.csv",header=T)
+XYZ <- read.csv("C:/Users/rodge/OneDrive/Desktop/DATA 180 -Intoduction to Data Science/DATA-180-Introduction-to-Data-Science--Section-2/data/loan_default_data_set.csv",header=T)
 #head(XYZ) 
 dim(XYZ)
 ```
